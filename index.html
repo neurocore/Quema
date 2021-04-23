@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Quema</title>
+	<link rel="stylesheet" href="style.css">
+	<script>window.$ = window.jQuery = require('./node_modules/jquery/dist/jquery.min.js');</script>
+	<script src="./node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="./src/main_window.js"></script>
+	<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+</head>
+<body>
+	<div class="heading">
+		<div class="title extra">Quema</div>
+		<div class="buttons">
+			<div data-code="minimize" class="btn min"></div>
+			<div data-code="maximize" class="btn max"></div>
+			<div data-code="close" class="btn close"></div>
+		</div>
+	</div>
+	<div class="screen">
+		<div class="screen__content">
+			<div class="row">
+				<div class="panel" id="queue">
+					<div class="title">Очередь</div>
+					<div class="queue">
+						<div class="group party"></div>
+						<div class="group rest"></div>
+					</div>
+				</div>
+				<div class="panel" id="stats">
+					<div class="title">Статистика</div>
+					
+				</div>
+			</div>
+
+			<div class="row expanded">
+				<div class="panel">
+					<div class="title">Лог</div>
+					<div class="log">
+						<div class="datetime">17:37</div>
+						<div class="event">Added new user "Agony"</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="panel">
+					<div class="title">Командная строка</div>
+					<label>>&nbsp;<input type="text"></label>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

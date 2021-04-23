@@ -1,0 +1,19 @@
+{
+  "name": "queue_app",
+  "version": "0.1.0",
+  "author": "Nikita Kurgin",
+  "description": "This app designed for building queues of users in a multiplayer game",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^11.2.1"
+  },
+  "dependencies": {
+    "jquery": "^3.5.1",
+    "jsdom": "^16.4.0"
+  }
+}
