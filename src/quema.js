@@ -1,3 +1,4 @@
+const fs = require('fs');
 const ipc = require('electron').ipcMain;
 const State = require('./state');
 const {
@@ -17,20 +18,30 @@ class Quema
 
     load()
     {
-        this.actions.push(new ActionClear());
-        this.actions.push(new ActionSetN(2));
-        this.actions.push(new ActionJoin('slaught00'));
-        this.actions.push(new ActionJoin('d288'));
-        this.actions.push(new ActionJoin('dmytr'));
-        this.actions.push(new ActionJoin('Agony'));
-        this.actions.push(new ActionBan('dmytr'));
-        this.actions.push(new ActionPlay());
+        const data = fs.readFileSync('settings/state.json', 'utf-8', err =>
+        {
+            console.log(err);
+            throw err;
+        });
+        this.state = this.state.decode(data);
+    }
 
+    execute_actions()
+    {
         for (let action of this.actions)
         {
             this.memento.push(this.state);
             if (!action.redo(this.state))
                 this.memento.pop();
+            else
+            {
+                const data = this.state.encode();
+                console.log(data);
+                fs.writeFile('settings/state.json', data, function(err)
+                {
+                    console.log(err);
+                });
+            }
         }
     }
 }
