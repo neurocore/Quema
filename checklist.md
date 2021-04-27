@@ -27,4 +27,5 @@
 - [ ] interpanel drag & drop (stats -> queue)
 - [ ] listen to chat users commands and execute (if possible)
 - [ ] two separate action lists for users and admin (to undo only admin actions)
-- [ ] do we really need command pattern instead memento? (test on big channels)
+- [ ] do we really need command pattern instead of memento? (test on big channels)
+- [ ] localization (English)

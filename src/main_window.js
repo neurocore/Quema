@@ -2,17 +2,15 @@ const ipc = require('electron').ipcRenderer;
 
 ipc.on('get-users-reply', (e, arg) =>
 {
-	const put_user = ($el, name) =>
-		$el.append(`<div class="item">
-                      <span>${name}</span>
-                      <div class="ban"></div>
-                    </div>`);
-
+	const put_user = ($el, name) => $el.append(`<div class="item">
+                                                    <span>${name}</span>
+                                                    <div class="ban"></div>
+                                                </div>`);
 	$('#queue .queue .group').empty();
-	for (let name of arg.party)
+	for (const name of arg.party)
 		put_user($('#queue .queue .group.party'), name);
 
-    for (let name of arg.queue)
+    for (const name of arg.queue)
 		put_user($('#queue .queue .group.rest'), name);
 
     $('#stats .stats tbody').empty();

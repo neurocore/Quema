@@ -58,7 +58,6 @@ class State
 
 	decode(str)
 	{
-		console.log(str);
 		function reviver(key, value)
 		{
 			if (typeof value === 'object' && value !== null)
