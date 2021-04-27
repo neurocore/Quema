@@ -311,3 +311,18 @@ body {
     background: #ebf4ff;
     color: #0472e3;
 }
+
+table.stats {
+    width: 100%;
+    table-layout: auto;
+}
+
+table.stats th {
+    font-weight: normal;
+    text-align: left;
+    color: #b5b5b5;
+}
+
+table.stats th, td {
+    padding: 5px 0;
+}

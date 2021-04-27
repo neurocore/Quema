@@ -1,3 +1,4 @@
+require('timers');
 const fs = require('fs');
 const ipc = require('electron').ipcMain;
 const State = require('./state');
@@ -12,6 +13,7 @@ class Quema
     {
         this.actions = [];
         this.memento = [];
+        this.actual_state = false;
         this.state = new State();
         this.load();
     }
@@ -30,6 +32,7 @@ class Quema
     {
         for (let action of this.actions)
         {
+            this.actual_state = false;
             this.memento.push(this.state);
             if (!action.redo(this.state))
                 this.memento.pop();
@@ -50,11 +53,16 @@ const quema = new Quema();
 
 ipc.on('get-users', (e, arg) =>
 {
+    if (arg === 'update' && quema.actual_state) return;
+
     console.log(arg);
+    quema.actual_state = true;
+
     e.reply('get-users-reply',
     {
         'party': quema.state.party,
         'queue': quema.state.queue,
+        'users': Array.from(quema.state.users.entries()),
     });
 });
 

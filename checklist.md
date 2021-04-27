@@ -6,7 +6,7 @@
 - [x] formalize state into simple object
 - [x] save/load state to file
 - [x] create actions with pure redo on state
-- [ ] output to panel "statictics" users stat 
+- [x] output to panel "statictics" users stat 
 - [ ] ability to ban user from panel "queue"
 - [ ] output actions log into respective panel
 - [ ] parse & execute commands from command line
