@@ -9,7 +9,7 @@
 - [x] output to panel "statictics" users stat 
 - [ ] ability to ban user from panel "queue"
 - [ ] output actions log into respective panel
-- [ ] parse & execute commands from command line
+- [x] parse & execute commands from command line
 - [x] command join [user] adds user to queue
 - [x] command ban [user] [time] to ban user
 - [x] command play [user] adds user to selection pool if selection started
@@ -20,7 +20,7 @@
 - [ ] status bar (waiting/selecting, last action)
 - [ ] make twitch connection via new window with oath request
 - [ ] read all followers from channel and update our list
-- [ ] testing (unit?)
+- [x] testing (unit)
 - [ ] actions are throwing exceptions to describe the essence of the error
 - [ ] strategies of adding users by its rating
 
