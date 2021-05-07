@@ -23,7 +23,7 @@ class Quema
             console.log(err);
             throw err;
         });
-        this.state = this.state.decode(data);
+        Object.assign(this.state, this.state.decode(data));
     }
 
     execute_actions()
