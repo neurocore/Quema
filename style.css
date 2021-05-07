@@ -326,3 +326,7 @@ table.stats th {
 table.stats th, td {
     padding: 5px 0;
 }
+
+table.stats tr.banned {
+    background: #b1cfed;
+}

@@ -17,8 +17,10 @@ ipc.on('get-users-reply', (e, arg) =>
     $('#stats .stats tbody').empty();
     for (const user of arg.users)
     {
-        let $el = $('#stats .stats tbody');
-        $el.append(`<tr>
+        const banned = Math.max(0, user[1].ban_endtime - Date.now());
+        const cls = banned > 0 ? 'banned' : '';
+        const $el = $('#stats .stats tbody');
+        $el.append(`<tr class="${cls}" data-banned="${banned}">
                         <td>${user[0]}</td>
                         <td>${user[1].joined_cnt}</td>
                         <td>${user[1].played_cnt}</td>
