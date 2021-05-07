@@ -2,6 +2,7 @@ const ipc = require('electron').ipcRenderer;
 
 ipc.on('get-users-reply', (e, arg) =>
 {
+    console.log('--- got', arg);
 	const put_user = ($el, name) => $el.append(`<div class="item">
                                                     <span>${name}</span>
                                                     <div class="ban"></div>
@@ -27,7 +28,11 @@ ipc.on('get-users-reply', (e, arg) =>
 });
 
 ipc.send('get-users', 'acquire');
-setInterval(() => ipc.send('get-users', 'update'), 5 * 1000);
+
+ipc.on('exec-command-reply', (e, arg) =>
+{
+    if (arg === 'done') ipc.send('get-users', 'update');
+});
 
 window.onload = function()
 {
@@ -36,4 +41,12 @@ window.onload = function()
 		let code = $(this).data('code');
 		ipc.send('control-click', code);
 	});
+
+    $('input[name="command_line"]').on('keydown', function(e)
+    {
+        if (e.keyCode !== 13) return;
+        const str = $(this).val();
+        $(this).val('');
+        ipc.send('exec-command', str);
+    });
 }
