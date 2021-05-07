@@ -10,17 +10,22 @@
 - [ ] ability to ban user from panel "queue"
 - [ ] output actions log into respective panel
 - [ ] parse & execute commands from command line
-- [ ] command join [user] adds user to queue
-- [ ] command play [code] sends to all users in party that code
-- [ ] command ban [user] [time] to ban user
-- [ ] commands clear, left [user], unban [user], set_n [n]
+- [x] command join [user] adds user to queue
+- [x] command ban [user] [time] to ban user
+- [x] command play [user] adds user to selection pool if selection started
+- [x] command start [code] [time] starting selection and then a game session
+- [x] commands clear, left [user], unban [user], set_n [n]
+- [ ] not form party from first N users in queue, otherwise listen to their + in chat
+- [ ] update screen on f5, changing scale
+- [ ] status bar (waiting/selecting, last action)
 - [ ] make twitch connection via new window with oath request
 - [ ] read all followers from channel and update our list
 - [ ] testing (unit?)
+- [ ] actions are throwing exceptions to describe the essence of the error
+- [ ] strategies of adding users by its rating
 
 ## 2. Improvements
 
-- [ ] not form party from first N users in queue, otherwise listen to their + in chat
 - [ ] remove afk-ing users from queue
 - [ ] change users stats after respective actions
 - [ ] drag & drop for panel "queue"
@@ -29,3 +34,5 @@
 - [ ] two separate action lists for users and admin (to undo only admin actions)
 - [ ] do we really need command pattern instead of memento? (test on big channels)
 - [ ] localization (English)
+- [ ] ability to hide/show panels
+- [ ] top navigation menu

@@ -1,43 +1,33 @@
 const User = require('./user');
+require('./types');
 
 class State
 {
 	constructor()
 	{
 		this.N = 8;
+        this.mode = Mode.Waiting;
 		this.users = new Map();
-		this.party = [];
-		this.queue = [];
+		this.queue = [];    // users that joined to common queue
+		this.party = [];    // users that are chosen to play in current session
+		this.selected = []; // users that are wishing to play in current session
 	}
 
 	set_n(val)
 	{
-		for (let i = 0; i < val - this.N; i++)
+		const M = this.party.length - val; // party is changing
+		for (let i = 0; i < M; i++)
 		{
-			let name = this.queue.shift();
-			if (typeof name === 'undefined') break;
-			this.party.push(name);
-		}
-
-		for (let i = 0; i < this.N - val; i++)
-		{
-			let name = this.party.pop();
-			if (typeof name === 'undefined') break;
+			const name = this.party.pop();
 			this.queue.unshift(name);
 		}
-
 		this.N = val;
 	}
 
 	get_user(name)
 	{
-		let user = this.users.get(name);
-		if (typeof user === 'undefined')
-		{
-			this.users.set(name, new User());
-			user = this.users.get(name);
-		}
-		return user;
+		const user = this.users.get(name);
+		return typeof user === 'undefined' ? false : user;
 	}
 
 	encode()
@@ -63,7 +53,19 @@ class State
 			if (typeof value === 'object' && value !== null)
 			{
 				if (value.dataType === 'Map')
-					return new Map(value.value);
+				{
+					const Userify = x =>
+					{
+						return {
+							0 : x[0],
+							1 : Object.create(
+									User.prototype,
+									Object.getOwnPropertyDescriptors(x[1])
+								)
+						};
+					}
+					return new Map(value.value.map(Userify));
+				}
 			}
 			return value;
 		}

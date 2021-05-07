@@ -1,4 +1,5 @@
-const User = require('./user');
+require('./utils');
+require('./types');
 
 class Action
 {
@@ -21,23 +22,51 @@ class ActionClear extends Action
 	}
 }
 
-class ActionPlay extends Action
+class ActionStart extends Action
 {
-	constructor()
+	constructor(code, time_sec = 30)
 	{
 		super();
+		this.code = code;
+		this.time_sec = time_sec;
 	}
 
 	redo(state)
 	{
-		state.party = [];
 		if (state.queue.length <= 0) return false;
-		for (let i = 0; i < state.N; i++)
+		state.mode = Mode.Selecting;
+
+		setTimeout(function()
 		{
-			let name = state.queue.shift();
-			if (typeof name === 'undefined') break;
-			state.party.push(name);
+			state.mode = Mode.Waiting;
+			console.log('session is complete');
+
+			state.party = [];
+			Object.assign(state.party, state.selected);
+			state.selected = [];
+			state.queue.removeIf(x => state.party.indexOf(x) >= 0);
 		}
+		, this.time_sec * 1000);
+
+		return true;
+	}
+}
+
+class ActionPlay extends Action
+{
+	constructor(name)
+	{
+		super();
+		this.name = name;
+	}
+
+	redo(state)
+	{
+		if (state.mode !== Mode.Selecting) return false;
+		if (state.queue.indexOf(this.name) < 0) return false;
+		if (state.selected.indexOf(this.name) >= 0) return false;
+
+		state.selected.push(this.name);
 		return true;
 	}
 }
@@ -52,10 +81,13 @@ class ActionJoin extends Action
 
 	redo(state)
 	{
-		let user = state.get_user(this.name);
-		if (user.is_banned) return false;
+		const user = state.get_user(this.name);
+		if (!user || user.is_banned()) return false;
 
-		user.joined++;
+		if (state.party.indexOf(this.name) >= 0) return false;
+		if (state.queue.indexOf(this.name) >= 0) return false;
+
+		user.joined_cnt++;
 		state.queue.push(this.name);
 		return true;
 	}
@@ -71,8 +103,9 @@ class ActionLeft extends Action
   
 	redo(state)
 	{
-		state.party.filter(x => x !== this.name);
-		state.queue.filter(x => x !== this.name);
+		const name = this.name;
+		state.party.removeIf(x => x === name);
+		state.queue.removeIf(x => x === name);
 		return true;
 	}
 }
@@ -87,12 +120,13 @@ class ActionBan extends Action
 
 	redo(state)
 	{
-		let user = state.get_user(this.name);
-		if (user.is_banned) return false;
+		const user = state.get_user(this.name);
+		if (user.is_banned()) return false;
 
-		user.is_banned = true;
-		state.party.filter(x => x !== this.name);
-		state.queue.filter(x => x !== this.name);
+		user.ban_for(1);
+		const name = this.name;
+		state.party.removeIf(x => x === name);
+		state.queue.removeIf(x => x === name);
 		return true;
 	}
 }
@@ -107,10 +141,10 @@ class ActionUnban extends Action
 
 	redo(state)
 	{
-		let user = state.get_user(this.name);
-		if (!user.is_banned) return false;
+		const user = state.get_user(this.name);
+		if (!user.is_banned()) return false;
 
-		user.is_banned = false;
+		user.unban();
 		return true;
 	}
 }
@@ -132,6 +166,6 @@ class ActionSetN extends Action
 
 module.exports =
 {
-	ActionClear, ActionPlay, ActionJoin, ActionLeft,
-	ActionBan, ActionUnban, ActionSetN, Action
+	ActionClear, ActionStart, ActionPlay, ActionSetN,
+	ActionJoin, ActionLeft, ActionBan, ActionUnban, Action
 };
