@@ -203,7 +203,7 @@ body {
     position: absolute;
     left: 0;
     right: 0;
-    width: 16px;
+    width: 17px;
     bottom: 5px;
     margin: auto;
     border-bottom: 4px solid;
@@ -329,4 +329,27 @@ table.stats th, td {
 
 table.stats tr.banned {
     background: #b1cfed;
+}
+
+.modal {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: var(--heading_h);
+    margin: 20px auto;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+}
+
+.modal .inner {
+    flex: 0 1 auto;
+    margin: auto;
+    border-radius: 8px;
+}
+
+.modal.zoom .inner {
+    background: rgba(241, 242, 243, .95);
+    padding: 12px 24px;
+    font-size: 18px;
 }

@@ -16,7 +16,7 @@
 - [x] command start [code] [time] starting selection and then a game session
 - [x] commands clear, left [user], unban [user], set_n [n]
 - [ ] not form party from first N users in queue, otherwise listen to their + in chat
-- [ ] update screen on f5, changing scale
+- [x] changing zoom by ctrl+wheel and ctrl+0
 - [ ] status bar (waiting/selecting, last action)
 - [ ] make twitch connection via new window with oath request
 - [ ] read all followers from channel and update our list
@@ -36,3 +36,4 @@
 - [ ] localization (English)
 - [ ] ability to hide/show panels
 - [ ] top navigation menu
+- [ ] dark theme

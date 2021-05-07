@@ -1,3 +1,4 @@
+const { webFrame } = require('electron')
 const ipc = require('electron').ipcRenderer;
 
 ipc.on('get-users-reply', (e, arg) =>
@@ -50,5 +51,51 @@ window.onload = function()
         const str = $(this).val();
         $(this).val('');
         ipc.send('exec-command', str);
+    });
+
+    let zoom = 1;
+    let zoom_showing_delay = null;
+
+    function update_zoom()
+    {
+        webFrame.setZoomFactor(zoom);
+        $('.modal.zoom .inner')
+            .text(Math.round(zoom * 100) + '%');
+
+        if (zoom_showing_delay !== null)
+            clearTimeout(zoom_showing_delay);
+
+        $('.modal.zoom')
+            .stop(true)
+            .css('visibility', 'visible')
+            .css('opacity', '1');
+
+        zoom_showing_delay = setTimeout(function()
+        {
+            $('.modal.zoom').fadeTo('slow', 0);
+        }, 1000);
+    }
+
+    $(document).on('mousewheel', function(e)
+    {
+        if (e.ctrlKey)
+        {
+            const delta = -e.originalEvent.deltaY / 1000;
+            if ((delta > 0 && zoom <  3)
+            ||  (delta < 0 && zoom > .2))
+                zoom += delta;
+            
+            zoom = Math.round(zoom * 10) / 10;
+            update_zoom();
+        }
+    });
+
+    $(document).on('keydown', function(e)
+    {
+        if (e.ctrlKey && e.keyCode == '0'.charCodeAt(0))
+        {
+            zoom = 1;
+            update_zoom();
+        }
     });
 }
