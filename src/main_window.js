@@ -55,6 +55,7 @@ window.onload = function()
 
     let zoom = 1;
     let zoom_showing_delay = null;
+    webFrame.setZoomFactor(zoom);
 
     function update_zoom()
     {
