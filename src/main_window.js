@@ -3,7 +3,7 @@ const ipc = require('electron').ipcRenderer;
 
 ipc.on('get-users-reply', (e, arg) =>
 {
-    console.log('--- got', arg);
+    console.log('--- got users reply', arg);
 	const put_user = ($el, name) => $el.append(`<div class="item">
                                                     <span>${name}</span>
                                                     <div class="ban"></div>
@@ -28,6 +28,26 @@ ipc.on('get-users-reply', (e, arg) =>
                         <td>${user[1].banned_cnt}</td>
                     </tr>`);
     }
+});
+
+ipc.on('get-connections', (e, arg) =>
+{
+    console.log('--- got connections', arg);
+    $('#' + arg.type + '_connect').each(function()
+    {
+        const state = 2 * arg.active + arg.pending;
+        const arr = [
+            ['Соединиться', 'inactive'],
+            ['Соединение', 'btn-info'],
+            ['Активно', 'btn-success'],
+            ['Активно', 'btn-success'],
+        ];
+
+        const row = arr[state];
+        $(this)
+            .text(row[0])
+            .removeClass().addClass('btn').addClass(row[1]);
+    });
 });
 
 ipc.send('get-users', 'acquire');

@@ -15,7 +15,7 @@
 - [x] commands clear, left [user], unban [user], set_n [n]
 - [x] changing zoom by ctrl+wheel and ctrl+0
 - [x] testing (unit)
-- [ ] make twitch connection via new window with oath request
+- [x] make twitch connection via new window with oath request
 - [ ] read all followers from channel and update our list
 - [ ] not form party from first N users in queue, otherwise listen to their + in chat
 - [ ] actions are throwing exceptions to describe the essence of the error

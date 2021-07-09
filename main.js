@@ -6,6 +6,8 @@ const quema = new Quema();
 
 app.whenReady().then(() =>
 {
+    quema.init();
+
     const win = new BrowserWindow(
     {
         width: 800, height: 800, frame: false, 
@@ -42,6 +44,8 @@ app.whenReady().then(() =>
 
     quema.win = win;
     console.log(quema);
+
+    win.once('ready-to-show', () => { quema.connect(); });
 });
 
 app.on('window-all-closed', () =>

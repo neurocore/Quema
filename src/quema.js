@@ -1,5 +1,6 @@
 const fs = require('fs');
 const State = require('./state');
+const { TwitchConnect, ConnState } = require('./connect');
 const {
     ActionClear, ActionStart, ActionPlay, ActionSetN,
     ActionJoin, ActionLeft, ActionBan, ActionUnban, Action
@@ -13,6 +14,11 @@ class Quema
         this.actions = [];
         this.memento = [];
         this.state = new State();
+        this.conn = new TwitchConnect();
+    }
+
+    init()
+    {
         this.load();
     }
 
@@ -24,6 +30,24 @@ class Quema
             throw err;
         });
         Object.assign(this.state, this.state.decode(data));
+    }
+
+    connect()
+    {
+        this.conn.state = ConnState.Pending;
+        this.render_conn();
+
+        this.conn.establish();
+        
+        const timer = setInterval(() =>
+        {
+            if (this.conn.token.length > 0
+            &&  this.win != undefined)
+            {
+                this.render_conn();
+                clearInterval(timer);
+            }
+        }, 200);
     }
 
     execute_actions()
@@ -60,6 +84,16 @@ class Quema
             'party': this.state.party,
             'queue': this.state.queue,
             'users': Array.from(this.state.users.entries()),
+        });
+    }
+
+    render_conn()
+    {
+        this.win.webContents.send('get-connections',
+        {
+            'type'   : this.conn.type.toLowerCase(),
+            'active' : this.conn.state == ConnState.Active,
+            'pending': this.conn.state == ConnState.Pending,
         });
     }
 

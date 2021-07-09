@@ -56,7 +56,7 @@ input {
     font-family: 'Inter';
     border: none;
     border-bottom: 2px solid #dadada;
-    min-width: 400px;
+    min-width: 250px;
 }
 
 input:focus, input:active {
@@ -352,4 +352,65 @@ table.stats tr.banned {
     background: rgba(241, 242, 243, .95);
     padding: 12px 24px;
     font-size: 18px;
+}
+
+.screen .btn {
+    background-color: #1b89fb;
+    color: #fff;
+    font-size: 13px;
+    border: none;
+    border-radius: 5px;
+    padding: 3px 10px;
+    box-shadow: 2px 3px 6px rgba(0,0,0,.1);
+    cursor: pointer;
+    position: relative;
+}
+
+.screen .btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,.12);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .4s, visibility .4s;
+}
+
+.screen .btn:active:before {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0s, visibility 0s;
+}
+
+.screen .btn-success {
+    background-color: #1abc87;
+}
+
+.screen .btn-warning {
+    background-color: #df5b4e;
+}
+
+.screen .btn-info {
+    background-color: #ebb724;
+}
+
+.screen .btn-special {
+    background-color: #9d54d4;
+}
+
+table.connections {
+
+}
+
+table.connections td:first-child {
+    padding-right: 10px;
+}
+
+.app_mode {
+    color: #a9a9a9;
+    font-size: 14px;
+    margin-top: 10px;
 }
