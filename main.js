@@ -11,7 +11,10 @@ app.whenReady().then(() =>
     const win = new BrowserWindow(
     {
         width: 800, height: 800, frame: false, 
-        webPreferences: {nodeIntegration: true}
+        webPreferences: {
+            contextIsolation: false,
+            nodeIntegration: true,
+        }
     });
     win.loadFile('index.html');
 

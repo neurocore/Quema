@@ -32,7 +32,11 @@ class TwitchConnect extends Connect
         const win_auth = new BrowserWindow(
         {
             width: 600, height: 450, frame: true, show: false, modal: true,
-            webPreferences: {nodeIntegration: true}
+            webPreferences: {
+                contextIsolation: true,
+                nodeIntegration: false,
+                preload: './preload.js'
+            }
         });
 
         const args =
@@ -44,11 +48,7 @@ class TwitchConnect extends Connect
             response_type: 'token'
         }
 
-        win_auth.webContents.session.webRequest
-            .onBeforeRequest({ urls: ['https://id.twitch.tv/'] }, (data, done) =>
-        {
-            win_auth.show();
-        });
+        // Catching twitch auth redirect and collecting all data in GET
 
         win_auth.webContents.session.webRequest
             .onBeforeRequest({ urls: [args.redirect_uri + '/'] }, (data, done) =>
@@ -71,7 +71,9 @@ class TwitchConnect extends Connect
             done({ cancel: false });
         });
 
+        // Opening twitch authorization window
         const url = make_url('https://id.twitch.tv/oauth2/authorize', args);
+        win_auth.once('ready-to-show', () => { win_auth.show() })
         win_auth.loadURL(url);
     }
 }
