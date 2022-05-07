@@ -19,6 +19,7 @@
     "utf-8-validate": "^5.0.2"
   },
   "dependencies": {
-    "jquery": "^3.5.1"
+    "jquery": "^3.5.1",
+    "node-fetch": "^2.6.1"
   }
 }

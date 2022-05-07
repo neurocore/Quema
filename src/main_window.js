@@ -35,19 +35,28 @@ ipc.on('get-connections', (e, arg) =>
     console.log('--- got connections', arg);
     $('#' + arg.type + '_connect').each(function()
     {
-        const state = 2 * arg.active + arg.pending;
-        const arr = [
-            ['Соединиться', 'inactive'],
-            ['Соединение', 'btn-info'],
-            ['Активно', 'btn-success'],
-            ['Активно', 'btn-success'],
-        ];
+        const state = arg.state;
+        const arr = {
+            'symbol(inactive)'  : ['Соединиться', 'inactive'],
+            'symbol(pending)'   : ['Соединение', 'btn-info'],
+            'symbol(connected)' : ['Соединение', 'btn-success'],
+            'symbol(active)'    : ['Активно', 'btn-success'],
+        };
 
         const row = arr[state];
+        if (typeof row !== 'undefined')
         $(this)
             .text(row[0])
             .removeClass().addClass('btn').addClass(row[1]);
     });
+
+    if (typeof arg.avatar !== 'undefined'
+    &&  typeof arg.login  !== 'undefined')
+    {
+        $('.admin_avatar img').attr('src', arg.avatar);
+        $('.admin_login').html(arg.login);
+        $('.admin_info').addClass('active');
+    }
 });
 
 ipc.send('get-users', 'acquire');

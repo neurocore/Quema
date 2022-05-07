@@ -132,6 +132,8 @@ body {
     margin-left: calc(var(--gapx)/2);
     margin-right: calc(var(--gapx)/2);
     flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .heading {
@@ -413,4 +415,38 @@ table.connections td:first-child {
     color: #a9a9a9;
     font-size: 14px;
     margin-top: 10px;
+}
+
+.admin_info {
+    margin-top: auto;
+    min-height: 20px;
+    display: flex;
+    justify-self: flex-end;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .4s, visibility .4s;
+}
+
+.admin_info.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .4s, visibility .4s;
+}
+
+.admin_avatar {
+    margin-right: 12px;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+}
+
+.admin_avatar img {
+    width: 100%;
+    height: 100%;
+}
+
+.admin_login {
+    font-size: 23px;
+    line-height: 40px;
 }

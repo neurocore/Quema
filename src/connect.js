@@ -1,7 +1,8 @@
+const fetch = require('node-fetch');
 const { BrowserWindow } = require('electron');
 require('./utils');
 
-const ConnState = Enum('Inactive', 'Pending', 'Active');
+const ConnState = Enum('Inactive', 'Pending', 'Connected', 'Active');
 
 class Connect
 {
@@ -9,12 +10,12 @@ class Connect
     {
         this.token = '';
         this.state = ConnState.Inactive;
+        this.user_id = 0;
     }
 
-    establish()
-    {
-        throw new Error('Can\'t use abstract class Connect');
-    }
+    establish()                     { throw new Error('Can\'t use abstract class Connect'); }
+    async init()                    { throw new Error('Can\'t use abstract class Connect'); }
+    async request(endpoint, params) { throw new Error('Can\'t use abstract class Connect'); }
 }
 
 class TwitchConnect extends Connect
@@ -64,7 +65,7 @@ class TwitchConnect extends Connect
             if (params.state === args.state && params.access_token)
             {
                 this.token = params.access_token;
-                this.state = ConnState.Active;
+                this.state = ConnState.Connected;
             }
             else this.state = ConnState.Inactive;
 
@@ -72,9 +73,45 @@ class TwitchConnect extends Connect
         });
 
         // Opening twitch authorization window
+
         const url = make_url('https://id.twitch.tv/oauth2/authorize', args);
-        win_auth.once('ready-to-show', () => { win_auth.show() })
+        win_auth.once('ready-to-show', () => {
+            setTimeout(() => {
+                if (!win_auth.isDestroyed())
+                    win_auth.show();
+            }, 500);
+        });
         win_auth.loadURL(url);
+    }
+
+    async init()
+    {
+        let users = await this.request('users');
+        if (users.length <= 0) return false;
+
+        let user = users[0];
+        this.user_id = user.id;
+
+        return {
+            'user_id'     : user.id,
+            'login'       : user.login,
+            'avatar'      : user.profile_image_url,
+            'background'  : user.offline_image_url,
+            'description' : user.description,
+        };
+    }
+
+    async request(endpoint, params)
+    {
+        if (typeof params === 'undefined') params = {broadcaster_id: this.user_id};
+        const url = make_url(`https://api.twitch.tv/helix/${endpoint}`, params);
+        const opt = {headers: {'Authorization': 'Bearer ' + this.token, 'Client-Id': client_id}};
+
+        const res = await fetch(url, opt);
+        const body = await res.json();
+
+        console.log('---', endpoint, body.data);
+        return body.data;
     }
 }
 

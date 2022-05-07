@@ -15,6 +15,7 @@ class Quema
         this.memento = [];
         this.state = new State();
         this.conn = new TwitchConnect();
+        this.admin = {};
     }
 
     init()
@@ -46,6 +47,18 @@ class Quema
             {
                 this.render_conn();
                 clearInterval(timer);
+
+                (async () => {
+                    let admin = await this.conn.init();
+                    this.admin = admin;
+                    this.conn.state = ConnState.Active;
+                    this.render_conn();
+
+                    let result = await this.conn.request('users/follows',
+                    {
+                        'to_id': this.conn.user_id
+                    });
+                })();
             }
         }, 200);
     }
@@ -92,8 +105,9 @@ class Quema
         this.win.webContents.send('get-connections',
         {
             'type'   : this.conn.type.toLowerCase(),
-            'active' : this.conn.state == ConnState.Active,
-            'pending': this.conn.state == ConnState.Pending,
+            'state'  : this.conn.state.toString().toLowerCase(),
+            'avatar' : this.admin.avatar,
+            'login'  : this.admin.login,
         });
     }
 
