@@ -1,10 +1,6 @@
 global.Enum = (...v) => Object.freeze(v.reduce((o, v) => (o[v] = Symbol.for(v), o), {}));
 
-global.make_url = (base, uri_obj) => Object.entries(uri_obj).reduce
-(
-    (a, x) => a + '&' + x[0] + '=' + x[1],
-    base + '?'
-);
+global.make_url = (base, uri_obj) => base + '?' + Object.entries(uri_obj).map((x) => x[0] + '=' + x[1]).join('&');
 
 Array.prototype.remove = val =>
 {
