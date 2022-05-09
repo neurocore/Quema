@@ -54,10 +54,10 @@ class Quema
                     this.conn.state = ConnState.Active;
                     this.render_conn();
 
-                    let result = await this.conn.request('users/follows',
-                    {
-                        'to_id': this.conn.user_id
-                    });
+                    let names = await this.conn.get_followers();
+                    this.state.add_users(names);
+                    this.render_users();
+                    this.save();
                 })();
             }
         }, 200);
@@ -71,26 +71,29 @@ class Quema
             if (!action.redo(this.state))
                 this.memento.pop();
             else
-            {
-                const data = this.state.encode();
-                fs.writeFile('settings/state.json', data, function(err)
-                {
-                    console.log(err);
-                });
-            }
+                this.save();
         }
         this.actions = [];
-        this.render();
+        this.render_users();
+    }
+
+    save()
+    {
+        const data = this.state.encode();
+        fs.writeFile('settings/state.json', data, function(err)
+        {
+            console.log(err);
+        });
     }
 
     undo()
     {
         this.state = this.memento.pop();
         console.log('undo', this);
-        this.render();
+        this.render_users();
     }
 
-    render()
+    render_users()
     {
         this.win.webContents.send('get-users-reply',
         {

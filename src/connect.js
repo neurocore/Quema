@@ -16,6 +16,7 @@ class Connect
     establish()                     { throw new Error('Can\'t use abstract class Connect'); }
     async init()                    { throw new Error('Can\'t use abstract class Connect'); }
     async request(endpoint, params) { throw new Error('Can\'t use abstract class Connect'); }
+    async get_followers()           { throw new Error('Can\'t use abstract class Connect'); }
 }
 
 class TwitchConnect extends Connect
@@ -86,10 +87,12 @@ class TwitchConnect extends Connect
 
     async init()
     {
-        let users = await this.request('users');
+        const result = await this.request('users');
+        const users = result.data;
+
         if (users.length <= 0) return false;
 
-        let user = users[0];
+        const user = users[0];
         this.user_id = user.id;
 
         return {
@@ -110,8 +113,32 @@ class TwitchConnect extends Connect
         const res = await fetch(url, opt);
         const body = await res.json();
 
-        console.log('---', endpoint, body.data);
-        return body.data;
+        // console.log('---', endpoint, body);
+        return body;
+    }
+
+    async get_followers()
+    {
+        const count = 100; // max for twitch api
+        let result = [];
+        let cursor = '';
+
+        while(true)
+        {
+            let followers = await this.request('users/follows',
+            {
+                'to_id': this.user_id,
+                'first': count,
+                'after': cursor,
+            });
+
+            for (let follower of followers.data)
+                result.push(follower.from_name);
+
+            cursor = followers.pagination.cursor;
+            if (typeof cursor === 'undefined') break;
+        }
+        return result;
     }
 }
 

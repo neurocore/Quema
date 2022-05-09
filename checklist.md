@@ -16,13 +16,14 @@
 - [x] changing zoom by ctrl+wheel and ctrl+0
 - [x] testing (unit)
 - [x] make twitch connection via new window with oath request
-- [ ] read all followers from channel and update our list
+- [x] read all followers from channel and update our list
 - [ ] not form party from first N users in queue, otherwise listen to their + in chat
 - [ ] actions are throwing exceptions to describe the essence of the error
 - [ ] output actions log into respective panel
 - [ ] strategies of adding users by its rating
 - [ ] status bar (waiting/selecting, last action)
 - [ ] ability to ban user from panel "queue"
+- [ ] ability to undo last actions
 
 ## 2. Improvements
 

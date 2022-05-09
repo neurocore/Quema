@@ -314,15 +314,24 @@ body {
     color: #0472e3;
 }
 
+.stats-wrap {
+    max-height: 240px;
+    overflow-y: scroll;
+}
+
 table.stats {
     width: 100%;
     table-layout: auto;
+    border-collapse: collapse;
 }
 
 table.stats th {
     font-weight: normal;
     text-align: left;
     color: #b5b5b5;
+    position: sticky;
+    top: 0;
+    background: var(--panel-back);
 }
 
 table.stats th, td {

@@ -30,6 +30,16 @@ class State
 		return typeof user === 'undefined' ? false : user;
 	}
 
+	add_users(names)
+	{
+		for (let name of names)
+        {
+            const user = this.users.get(name);
+            if (typeof user === 'undefined')
+                this.users.set(name, new User());
+        }
+	}
+
 	encode()
 	{
 		function replacer(key, value)
